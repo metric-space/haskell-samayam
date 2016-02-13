@@ -1,0 +1,9 @@
+- Display multilines strings in boxes.
+- Boxes should be connected to a visible central spine
+- check for sqlite, and handle yes/no appropriately
+- Hidden sqlite db to be created in home directory
+- pull, update and delete info to sqlitedb
+- simple repl with small dDL to CRUD info
+- scroll through graphical list
+- time should be shown in pseudo-real time, refresh concurrently
+- add info via commandline argument info
