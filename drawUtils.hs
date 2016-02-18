@@ -20,7 +20,8 @@ stringBox stringToDraw = do
       let hLength = toInteger  (2*hLengthAdditive + len) -- addition for padding
           vLength = toInteger  (2*vLengthAdditive + length decons)
           mappedIOFunction (index,word) =  do 
-              moveCurrentCursor (toInteger $ vLengthAdditive + index) (toInteger $ hLengthAdditive*(notFunction index))
+              -- got to clean this up soon
+              moveCurrentCursor (toInteger $ vLengthAdditive*(1 - index) + index) (toInteger $ hLengthAdditive*(notFunction index))
               drawString_ word
       (_,_) <- drawBox_ hLength vLength
       mapM_ mappedIOFunction $ zip (0:[1,1..]) decons

@@ -10,7 +10,7 @@ main = runCurses $ do
     --drawString "Hello world!"  
     --moveCursor 3 10 
     --stringBox "Sevi Seviyorum"
-    --moveCursor 0 0
+    moveCursor 3 10 
     stringBox "chicken chicken \n on the who's the chicken of them all"
     moveCurrentCursor 40 40
     
