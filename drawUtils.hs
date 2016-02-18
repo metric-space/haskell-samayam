@@ -1,22 +1,40 @@
 module DrawUtils where
 
-import UI.NCurses
+import UI.NCurses 
+import Data.List
 
-vLengthAdditive  = 1 + 4 
-hLengthAdditive  = 2
+notFunction :: Int -> Int
+notFunction 0 = 1
+notFunction 1 = 0
+
+vLengthAdditive  = 2  :: Int
+hLengthAdditive  = 2  :: Int
 
 stringBox :: String -> Update ()
 stringBox stringToDraw = do
-  let len = length stringToDraw 
+  let decons = lines stringToDraw
+      len = length . head . sort $ decons  
   if len == 0 
     then return ()
     else do
-      let hLength = toInteger $ 6*hLengthAdditive + len
-          vLength = vLengthAdditive
-      pDrawLineH hLength 
-      pDrawLineV vLength
-      pDrawLineH (-hLength)
-      pDrawLineV (-vLength)
+      let hLength = toInteger  (2*hLengthAdditive + len) -- addition for padding
+          vLength = toInteger  (2*vLengthAdditive + length decons)
+          mappedIOFunction (index,word) =  do 
+              moveCurrentCursor (toInteger $ vLengthAdditive + index) (toInteger $ hLengthAdditive*(notFunction index))
+              drawString_ word
+      (_,_) <- drawBox_ hLength vLength
+      mapM_ mappedIOFunction $ zip (0:[1,1..]) decons
+      return ()
+            
+drawBox_ :: Integer -> Integer -> Update(Integer,Integer)
+drawBox_ h_ v = do
+  let h = h_
+  pDrawLineH h 
+  pDrawLineV v
+  pDrawLineH (-h)
+  pDrawLineV (-v)
+  (currentX, currentY) <- cursorPosition 
+  return (currentX, currentY)
 
 -- raison d'etre : after drawing a line, 
 -- program jumps back to the start of the line
@@ -45,4 +63,16 @@ pDrawLineV x =  do
     else do
       moveCursor (currentX +x) currentY
       drawLineV Nothing (abs x)
+
+-- raison d'etre : move cursor from current location to destination
+moveCurrentCursor :: Integer -> Integer -> Update ()
+moveCurrentCursor x y  = do 
+  (currentX, currentY) <- cursorPosition 
+  moveCursor (currentX + x) (currentY + y)
+
+drawString_ :: String -> Update()
+drawString_ stringToDraw = do
+  drawString stringToDraw
+  (currentX, currentY) <- cursorPosition 
+  moveCursor currentX (currentY - (toInteger $ (length stringToDraw)))
 

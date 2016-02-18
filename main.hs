@@ -1,11 +1,19 @@
-import DrawUtils
+import DrawUtils as M
 import UI.NCurses
 
 main :: IO ()
 main = runCurses $ do
   setEcho False
   w <- defaultWindow
-  updateWindow w $ moveCursor 1 10 >> drawString "Hello world!" >> moveCursor 3 10 >> stringBox "Hello" >> moveCursor 0 0
+  updateWindow w $ do
+    moveCursor 1 10 
+    --drawString "Hello world!"  
+    --moveCursor 3 10 
+    --stringBox "Sevi Seviyorum"
+    --moveCursor 0 0
+    stringBox "chicken chicken \n on the who's the chicken of them all"
+    moveCurrentCursor 40 40
+    
   render
   waitFor w (\ev -> ev == EventCharacter 'q' || ev == EventCharacter 'Q')
 
